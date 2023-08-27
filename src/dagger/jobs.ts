@@ -29,7 +29,7 @@ export const test = async (client: Client, src = ".") => {
     .withMountedCache("/app/.build", client.cacheVolume("swift-build"))
     .withDirectory("/app", context, { exclude })
     .withWorkdir("/app")
-    .withExec(["sh", "-c", `eval "$(devbox global shellenv)" && swift test`]);
+    .withExec(["bash", "-c", 'eval "$(devbox global shellenv)" && swift test']);
 
   const result = await ctr.stdout();
 
@@ -43,7 +43,11 @@ export const build = async (client: Client, src = ".") => {
     .withMountedCache("/app/.build", client.cacheVolume("swift-build"))
     .withDirectory("/app", context, { exclude })
     .withWorkdir("/app")
-    .withExec(["sh", "-c", `eval "$(devbox global shellenv)" && swift build`]);
+    .withExec([
+      "bash",
+      "-c",
+      'eval "$(devbox global shellenv)" && swift build',
+    ]);
 
   const result = await ctr.stdout();
 

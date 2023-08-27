@@ -1,0 +1,28 @@
+{
+  "configurations": [
+    {
+      "type": "lldb",
+      "request": "launch",
+      "sourceLanguages": [
+        "swift"
+      ],
+      "name": "Debug example (example)",
+      "program": "${workspaceFolder:swift-pipeline}/example/.build/debug/example",
+      "args": [],
+      "cwd": "${workspaceFolder:swift-pipeline}/example",
+      "preLaunchTask": "swift: Build Debug example (example)"
+    },
+    {
+      "type": "lldb",
+      "request": "launch",
+      "sourceLanguages": [
+        "swift"
+      ],
+      "name": "Release example (example)",
+      "program": "${workspaceFolder:swift-pipeline}/example/.build/release/example",
+      "args": [],
+      "cwd": "${workspaceFolder:swift-pipeline}/example",
+      "preLaunchTask": "swift: Build Release example (example)"
+    }
+  ]
+}

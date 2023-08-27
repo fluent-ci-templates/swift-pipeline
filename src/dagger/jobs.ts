@@ -1,5 +1,4 @@
 import Client from "@dagger.io/dagger";
-import { withDevbox } from "https://deno.land/x/nix_installer_pipeline@v0.3.6/src/dagger/steps.ts";
 
 export enum Job {
   test = "test",
@@ -10,26 +9,17 @@ const SWIFT_VERSION = Deno.env.get("SWIFT_VERSION") || "5.8";
 
 const exclude = [".git", ".build", ".fluentci"];
 
-const baseCtr = (client: Client, pipeline: string) =>
-  withDevbox(
-    client
-      .pipeline(pipeline)
-      .container()
-      .from("alpine:latest")
-      .withExec(["apk", "update"])
-      .withExec(["apk", "add", "bash", "curl"])
-      .withMountedCache("/nix", client.cacheVolume("nix"))
-      .withMountedCache("/etc/nix", client.cacheVolume("nix-etc"))
-  ).withExec(["devbox", "global", "add", `swift@${SWIFT_VERSION}`]);
-
 export const test = async (client: Client, src = ".") => {
   const context = client.host().directory(src);
 
-  const ctr = baseCtr(client, Job.test)
+  const ctr = client
+    .pipeline(Job.test)
+    .container()
+    .from(`swiftlang/swift:nightly-${SWIFT_VERSION}-jammy`)
     .withMountedCache("/app/.build", client.cacheVolume("swift-build"))
     .withDirectory("/app", context, { exclude })
     .withWorkdir("/app")
-    .withExec(["bash", "-c", 'eval "$(devbox global shellenv)" && swift test']);
+    .withExec(["swift", "test"]);
 
   const result = await ctr.stdout();
 
@@ -39,15 +29,14 @@ export const test = async (client: Client, src = ".") => {
 export const build = async (client: Client, src = ".") => {
   const context = client.host().directory(src);
 
-  const ctr = baseCtr(client, Job.test)
+  const ctr = client
+    .pipeline(Job.build)
+    .container()
+    .from(`swiftlang/swift:nightly-${SWIFT_VERSION}-jammy`)
     .withMountedCache("/app/.build", client.cacheVolume("swift-build"))
     .withDirectory("/app", context, { exclude })
     .withWorkdir("/app")
-    .withExec([
-      "bash",
-      "-c",
-      'eval "$(devbox global shellenv)" && swift build',
-    ]);
+    .withExec(["swift", "build"]);
 
   const result = await ctr.stdout();
 

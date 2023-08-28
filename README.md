@@ -47,7 +47,7 @@ You can also use this pipeline programmatically:
 
 ```ts
 import { Client, connect } from "https://esm.sh/@dagger.io/dagger@0.8.1";
-import { Dagger } from "https://cdn.jsdelivr.net/gh/fluent-ci-templates/swift-pipeline/mod.ts";
+import { Dagger } from "https://pkg.fluentci.io/swift_pipeline/mod.ts";
 
 const { test, build } = Dagger;
 

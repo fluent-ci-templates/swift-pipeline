@@ -7,7 +7,7 @@ export enum Job {
 
 const SWIFT_VERSION = Deno.env.get("SWIFT_VERSION") || "5.8";
 
-const exclude = [".git", ".build", ".fluentci"];
+export const exclude = [".git", ".build", ".fluentci"];
 
 export const test = async (client: Client, src = ".") => {
   const context = client.host().directory(src);

@@ -1,7 +1,7 @@
 # Swift Pipeline
 
 [![fluentci pipeline](https://img.shields.io/badge/dynamic/json?label=pkg.fluentci.io&labelColor=%23000&color=%23460cf1&url=https%3A%2F%2Fapi.fluentci.io%2Fv1%2Fpipeline%2Fswift_pipeline&query=%24.version)](https://pkg.fluentci.io/swift_pipeline)
-![deno compatibility](https://shield.deno.dev/deno/^1.34)
+![deno compatibility](https://shield.deno.dev/deno/^1.37)
 [![](https://img.shields.io/codecov/c/gh/fluent-ci-templates/swift-pipeline)](https://codecov.io/gh/fluent-ci-templates/swift-pipeline)
 
 A ready-to-use Pipeline for your [Swift](https://www.swift.org/) projects.
@@ -41,20 +41,18 @@ fluentci run .
 | test      | Run tests     |
 | build     | Build project |
 
+```graphql
+build(src: String!): String
+test(src: String!): String
+```
+
 ## Programmatic usage
 
 You can also use this pipeline programmatically:
 
 ```ts
-import Client, { connect } from "https://sdk.fluentci.io/v0.1.9/mod.ts";
-import { test, build } from "https://pkg.fluentci.io/swift_pipeline@v0.3.2/mod.ts";
+import { test, build } from "https://pkg.fluentci.io/swift_pipeline@v0.4.0/mod.ts";
 
-function pipeline(src = ".") {
-  connect(async (client: Client) => {
-    await test(client, src);
-    await build(client, src);
-  });
-}
-
-pipeline();
+await test();
+await build();
 ```

@@ -1,0 +1,5 @@
+{
+  "root": "",
+  "name": "swift",
+  "sdkRuntime": "tsiry/dagger-sdk-deno"
+}

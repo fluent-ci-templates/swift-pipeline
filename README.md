@@ -49,9 +49,13 @@ dagger mod install github.com/fluent-ci-templates/swift-pipeline@mod
 | test      | Run tests     |
 | build     | Build project |
 
-```graphql
-build(src: String!): String
-test(src: String!): String
+```typescript
+build(
+  src: Directory | string | undefined = "."
+): Promise<Directory | string>
+test(
+  src: Directory | string | undefined = "."
+): Promise<string>
 ```
 
 ## Programmatic usage

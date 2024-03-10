@@ -1,5 +1,8 @@
-import { Client, Directory } from "../../sdk/client.gen.ts";
-import { connect } from "../../sdk/connect.ts";
+/**
+ * @module swift
+ * @description This module provides a set of functions for working with Swift projects.
+ */
+import { dag, env, Directory } from "../../deps.ts";
 import { getDirectory } from "./lib.ts";
 
 export enum Job {
@@ -7,11 +10,13 @@ export enum Job {
   build = "build",
 }
 
-const SWIFT_VERSION = Deno.env.get("SWIFT_VERSION") || "5.8";
+const SWIFT_VERSION = env.get("SWIFT_VERSION") || "5.8";
 
 export const exclude = [".git", ".build", ".fluentci"];
 
 /**
+ * Run tests
+ *
  * @function
  * @description Run tests
  * @param {string | Directory} src
@@ -20,25 +25,23 @@ export const exclude = [".git", ".build", ".fluentci"];
 export async function test(
   src: Directory | string | undefined = "."
 ): Promise<string> {
-  let result = "";
-  await connect(async (client: Client) => {
-    const context = getDirectory(client, src);
+  const context = await getDirectory(src);
 
-    const ctr = client
-      .pipeline(Job.test)
-      .container()
-      .from(`swiftlang/swift:nightly-${SWIFT_VERSION}-jammy`)
-      .withMountedCache("/app/.build", client.cacheVolume("swift-build"))
-      .withDirectory("/app", context, { exclude })
-      .withWorkdir("/app")
-      .withExec(["swift", "test"]);
+  const ctr = dag
+    .pipeline(Job.test)
+    .container()
+    .from(`swiftlang/swift:nightly-${SWIFT_VERSION}-jammy`)
+    .withMountedCache("/app/.build", dag.cacheVolume("swift-build"))
+    .withDirectory("/app", context, { exclude })
+    .withWorkdir("/app")
+    .withExec(["swift", "test"]);
 
-    result = await ctr.stdout();
-  });
-  return result;
+  return ctr.stdout();
 }
 
 /**
+ * Build the project
+ *
  * @function
  * @description Build the project
  * @param {string | Directory} src
@@ -47,24 +50,20 @@ export async function test(
 export async function build(
   src: Directory | string | undefined = "."
 ): Promise<Directory | string> {
-  let id = "";
-  await connect(async (client: Client) => {
-    const context = getDirectory(client, src);
+  const context = await getDirectory(src);
 
-    const ctr = client
-      .pipeline(Job.build)
-      .container()
-      .from(`swiftlang/swift:nightly-${SWIFT_VERSION}-jammy`)
-      .withMountedCache("/app/.build", client.cacheVolume("swift-build"))
-      .withDirectory("/app", context, { exclude })
-      .withWorkdir("/app")
-      .withExec(["swift", "build"])
-      .withExec(["cp", "-r", ".build", "/"]);
+  const ctr = dag
+    .pipeline(Job.build)
+    .container()
+    .from(`swiftlang/swift:nightly-${SWIFT_VERSION}-jammy`)
+    .withMountedCache("/app/.build", dag.cacheVolume("swift-build"))
+    .withDirectory("/app", context, { exclude })
+    .withWorkdir("/app")
+    .withExec(["swift", "build"])
+    .withExec(["cp", "-r", ".build", "/"]);
 
-    await ctr.stdout();
-    id = await ctr.directory("/.build").id();
-  });
-  return id;
+  await ctr.stdout();
+  return ctr.directory("/.build").id();
 }
 
 export type JobExec = (

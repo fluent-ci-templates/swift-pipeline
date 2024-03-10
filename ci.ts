@@ -1,7 +1,7 @@
 import {
   test,
   build,
-} from "https://pkg.fluentci.io/swift_pipeline@v0.5.0/mod.ts";
+} from "jsr:@fluentci/swift";
 
 await test();
 await build();

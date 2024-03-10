@@ -1,5 +1,0 @@
-{
-  swift {
-    build(src: ".")
-  }
-}

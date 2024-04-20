@@ -17,7 +17,7 @@ pub fn setup(version: String) -> FnResult<String> {
 pub fn build(args: String) -> FnResult<String> {
     let mut version = dag().get_env("SWIFT_VERSION").unwrap_or_default();
     if version.is_empty() {
-        version = "5.8".into();
+        version = "5.7".into();
     }
 
     setup_swift(version)?;
@@ -32,7 +32,7 @@ pub fn build(args: String) -> FnResult<String> {
 pub fn test(args: String) -> FnResult<String> {
     let mut version = dag().get_env("SWIFT_VERSION").unwrap_or_default();
     if version.is_empty() {
-        version = "5.8".into();
+        version = "5.7".into();
     }
 
     setup_swift(version)?;

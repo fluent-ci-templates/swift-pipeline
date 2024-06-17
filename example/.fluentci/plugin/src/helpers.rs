@@ -1,19 +1,18 @@
 use anyhow::Error;
 use fluentci_pdk::dag;
 
-pub fn setup_swift(version: String) -> Result<String, Error> {
-    let mut version = version;
-    if version.is_empty() {
-        version = "5.7".into();
-    }
+pub fn setup_swift() -> Result<String, Error> {
+    let path = dag().get_env("PATH")?;
+
+    dag().set_envs(vec![(
+        "PATH".into(),
+        format!("/home/linuxbrew/.linuxbrew/bin:{}", path),
+    )])?;
 
     let stdout = dag()
-        .devbox()?
-        .with_exec(vec!["[ -f  devbox.json ] || devbox init"])?
-        .with_exec(vec![&format!(
-            "grep -q 'swift' devbox.json || devbox add swift@{} swiftpm",
-            version
-        )])?
+        .pipeline("setup")?
+        .with_exec(vec![r#"type brew > /dev/null || /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)""#])?
+        .with_exec(vec!["type swift > /dev/null || brew install swift"])?
         .stdout()?;
     Ok(stdout)
 }

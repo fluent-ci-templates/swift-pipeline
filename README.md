@@ -1,8 +1,8 @@
 # Swift Pipeline
 
 [![fluentci pipeline](https://img.shields.io/badge/dynamic/json?label=pkg.fluentci.io&labelColor=%23000&color=%23460cf1&url=https%3A%2F%2Fapi.fluentci.io%2Fv1%2Fpipeline%2Fswift_pipeline&query=%24.version)](https://pkg.fluentci.io/swift_pipeline)
-![deno compatibility](https://shield.deno.dev/deno/^1.41)
-[![dagger-min-version](https://img.shields.io/badge/dagger-v0.10.0-blue?color=3D66FF&labelColor=000000)](https://dagger.io)
+![deno compatibility](https://shield.deno.dev/deno/^1.42)
+[![dagger-min-version](https://img.shields.io/badge/dagger-v0.11.7-blue?color=3D66FF&labelColor=000000)](https://dagger.io)
 [![](https://jsr.io/badges/@fluentci/swift)](https://jsr.io/@fluentci/swift)
 [![](https://img.shields.io/codecov/c/gh/fluent-ci-templates/swift-pipeline)](https://codecov.io/gh/fluent-ci-templates/swift-pipeline)
 [![ci](https://github.com/fluent-ci-templates/swift-pipeline/actions/workflows/ci.yml/badge.svg)](https://github.com/fluent-ci-templates/swift-pipeline/actions/workflows/ci.yml)
